@@ -1,0 +1,187 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace multi_media_game
+{
+
+    public partial class mainForm : Form
+    {
+        List<CACTor> LActs = new List<CACTor>();
+        Bitmap off;
+        Timer tt = new Timer();
+        int time = 0;
+        int flagJump = 0;
+        int ctJ = 0;
+        int jumpSpeed = 25;
+        int groundY;
+        int f = 0;
+
+
+        public mainForm(int fo)
+        {
+
+            InitializeComponent();
+            this.WindowState = FormWindowState.Maximized;
+            this.BackgroundImage = new Bitmap("form.png");
+            this.BackgroundImageLayout = ImageLayout.Stretch;
+            this.KeyDown += MainForm_KeyDown;
+            this.KeyUp += MainForm_KeyUp;
+            tt.Tick += Tt_Tick; 
+            tt.Interval = 100;
+            tt.Start();
+            f = fo;
+        }
+
+        private void MainForm_KeyUp(object sender, KeyEventArgs e)
+        {
+        }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Right)
+            {
+
+                CACTor hero = LActs[0];
+                hero.X += 15;
+                hero.IF = (hero.IF + 1) % 10;
+                flagJump = 0;
+
+            }
+            if (e.KeyCode == Keys.Left)
+            {
+                CACTor hero = LActs[0];
+                hero.X -= 15;
+                hero.IF = (hero.IF + 1) % 10;
+                flagJump = 0;
+            }
+
+            /// jump
+            if (e.KeyCode == Keys.Space && flagJump == 0 && ctJ == 0)
+            {
+                flagJump = 1;
+            }
+
+
+            DrawDubb(this.CreateGraphics());
+
+        }
+
+        private void Tt_Tick(object sender, EventArgs e)
+        {
+            if (off == null) return;
+            Jump();
+
+
+            time++;
+            DrawDubb(this.CreateGraphics());
+
+        }
+        void Jump()
+        {
+            if (LActs.Count == 0) return;
+            CACTor hero = LActs[0];
+
+            if (flagJump == 1)
+            {
+                if (ctJ < 5)
+                {
+                    hero.Y -= jumpSpeed;
+                    hero.X += jumpSpeed / 3;
+
+                    hero.IF = (hero.IF + 1) % 10;
+                    ctJ++;
+                }
+                else if (ctJ < 10)
+                {
+                    hero.Y += jumpSpeed;
+                    hero.X += jumpSpeed / 3;
+
+                    hero.IF = (hero.IF + 1) % 10;
+                    ctJ++;
+                }
+                else
+                {
+                    hero.Y = groundY;
+                    ctJ = 0;
+                    flagJump = 0; 
+
+                }
+            }
+        }
+        private void mainForm_Load(object sender, EventArgs e)
+        {
+            off = new Bitmap(this.ClientSize.Width, this.ClientSize.Height);
+            this.label1.BackColor = Color.Transparent;
+            if(f == 1)
+            {
+                this.Close(); 
+            }
+            creatHero();
+            groundY = LActs[0].Y;  
+            DrawDubb(this.CreateGraphics());
+        }
+
+        void creatHero()
+        {
+            Random RR = new Random();
+            CACTor pnn = new CACTor();
+
+            pnn.X = this.ClientSize.Width / 20;
+            pnn.Y = this.ClientSize.Height / 2 + this.ClientSize.Height / 4 - 70;
+            pnn.IF = RR.Next(10);        
+            pnn.Imgs = new List<Bitmap>();
+
+            for (int i = 0; i < 10; i++)  
+            {
+                Bitmap pnnSora = new Bitmap("m" + (i + 1) + ".png");
+                pnnSora.MakeTransparent(pnnSora.GetPixel(0, 0));
+                pnn.Imgs.Add(pnnSora);
+            }
+
+            LActs.Add(pnn);
+        }
+
+        void DrawDubb(Graphics g)
+        {
+            Graphics g2 = Graphics.FromImage(off);
+
+            DrawScene(g2);
+            g.DrawImage(off, 0, 0);
+        }
+
+        void DrawScene(Graphics g)
+        {
+            if (this.BackgroundImage != null)
+            {
+                g.DrawImage(this.BackgroundImage, 0, 0, off.Width, off.Height);
+
+            }
+            else
+            {
+                g.Clear(Color.Green);
+
+            }
+            for (int i = 0; i < LActs.Count; i++)
+            {
+                CACTor pTrv = LActs[i];
+                g.DrawImage(pTrv.Imgs[pTrv.IF], pTrv.X, pTrv.Y);
+            }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            close c = new close();
+            c.Show();
+        }
+    }
+
+    public class CACTor
+    {
+        public int X, Y;
+        public List<Bitmap> Imgs;
+        public int IF;
+    }
+
+}
