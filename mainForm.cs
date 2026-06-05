@@ -9,6 +9,8 @@ namespace multi_media_game
     public partial class mainForm : Form
     {
         List<CACTor> LActs = new List<CACTor>();
+        List<CACTor> coins = new List<CACTor>();
+
         List<MuImage> lm = new List<MuImage>();
 
         Bitmap off;
@@ -48,7 +50,11 @@ namespace multi_media_game
                 hero.IF = (hero.IF + 1) % 10;
                 flagJump = 0;
                 scrollX += 20;
+                for (int i = 0; i < coins.Count; i++)
+                {
+                    coins[i].IF = (coins[i].IF + 1) % 8;
 
+                }
                 if (scrollX > lm[0].sora.Width - this.ClientSize.Width)
                 {
                     scrollX = lm[0].sora.Width - this.ClientSize.Width;
@@ -62,6 +68,11 @@ namespace multi_media_game
                 hero.IF = (hero.IF + 1) % 10;
                 flagJump = 0;
                 scrollX -= 20;
+                for (int i = 0; i < coins.Count; i++)
+                {
+                    coins[i].IF = (coins[i].IF + 1) % 8;
+
+                }
                 if (scrollX < 0)
                 {
                     scrollX = 0;
@@ -85,7 +96,13 @@ namespace multi_media_game
             {
                 return;
             }
-                Jump();
+            Jump();
+            for (int i = 0; i < coins.Count; i++)
+            {
+                coins[i].IF = (coins[i].IF + 1) % 8;
+
+            }
+            getCoins();
 
 
             time++;
@@ -94,8 +111,11 @@ namespace multi_media_game
         }
         void Jump()
         {
-            if (LActs.Count == 0) return;
-            CACTor hero = LActs[0];
+            if (LActs.Count == 0)
+            {
+                return;
+            }
+                CACTor hero = LActs[0];
 
             if (flagJump == 1)
             {
@@ -133,12 +153,28 @@ namespace multi_media_game
             {
                 this.Close(); 
             }
+            createCoins();
             creatHero();
             groundY = LActs[0].Y;  
             DrawDubb(this.CreateGraphics());
         }
         int scrollX = 0;
+        void getCoins()
+        {
+            CACTor hero = LActs[0];
 
+            for (int i = 0; i < coins.Count; i++)
+            {
+                CACTor coin = coins[i];
+
+                if (hero.X + 80 > coin.X && hero.X < coin.X + 60 &&
+                    hero.Y + 80 > coin.Y && hero.Y < coin.Y + 60)
+                {
+                    coins.RemoveAt(i); 
+
+                }
+            }
+        }
         void createMap()
         {
             MuImage temp = new MuImage();
@@ -146,6 +182,25 @@ namespace multi_media_game
             temp.src = new Rectangle(0, 0, temp.sora.Width, temp.sora.Height);
             temp.Dst = new Rectangle(0, 0, this.ClientSize.Width, this.ClientSize.Height);
             lm.Add(temp);
+        }
+        void createCoins()
+        {
+            Random RR = new Random();
+            CACTor pnn = new CACTor();
+
+            pnn.X = this.ClientSize.Width / 3;
+            pnn.Y = this.ClientSize.Height / 2 + this.ClientSize.Height / 4 - 70;
+            pnn.IF = RR.Next(8);
+            pnn.Imgs = new List<Bitmap>();
+
+            for (int i = 0; i < 8; i++)
+            {
+                Bitmap pnnSora = new Bitmap("coin" + (i + 1) + ".png");
+                pnnSora.MakeTransparent(pnnSora.GetPixel(0, 0));
+                pnn.Imgs.Add(pnnSora);
+            }
+
+            coins.Add(pnn);
         }
         void creatHero()
         {
@@ -190,6 +245,11 @@ namespace multi_media_game
             for (int i = 0; i < LActs.Count; i++)
             {
                 CACTor pTrv = LActs[i];
+                g.DrawImage(pTrv.Imgs[pTrv.IF], pTrv.X, pTrv.Y);
+            }
+            for (int i = 0; i < coins.Count; i++)
+            {
+                CACTor pTrv = coins[i];
                 g.DrawImage(pTrv.Imgs[pTrv.IF], pTrv.X, pTrv.Y);
             }
         }
