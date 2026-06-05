@@ -9,6 +9,8 @@ namespace multi_media_game
     public partial class mainForm : Form
     {
         List<CACTor> LActs = new List<CACTor>();
+        List<MuImage> lm = new List<MuImage>();
+
         Bitmap off;
         Timer tt = new Timer();
         int time = 0;
@@ -24,8 +26,6 @@ namespace multi_media_game
 
             InitializeComponent();
             this.WindowState = FormWindowState.Maximized;
-            this.BackgroundImage = new Bitmap("form.png");
-            this.BackgroundImageLayout = ImageLayout.Stretch;
             this.KeyDown += MainForm_KeyDown;
             this.KeyUp += MainForm_KeyUp;
             tt.Tick += Tt_Tick; 
@@ -47,7 +47,13 @@ namespace multi_media_game
                 hero.X += 15;
                 hero.IF = (hero.IF + 1) % 10;
                 flagJump = 0;
+                scrollX += 20;
 
+                if (scrollX > lm[0].sora.Width - this.ClientSize.Width)
+                {
+                    scrollX = lm[0].sora.Width - this.ClientSize.Width;
+
+                }
             }
             if (e.KeyCode == Keys.Left)
             {
@@ -55,9 +61,14 @@ namespace multi_media_game
                 hero.X -= 15;
                 hero.IF = (hero.IF + 1) % 10;
                 flagJump = 0;
+                scrollX -= 20;
+                if (scrollX < 0)
+                {
+                    scrollX = 0;
+                }
             }
 
-            /// jump
+            /// jump ya mohammed
             if (e.KeyCode == Keys.Space && flagJump == 0 && ctJ == 0)
             {
                 flagJump = 1;
@@ -70,8 +81,11 @@ namespace multi_media_game
 
         private void Tt_Tick(object sender, EventArgs e)
         {
-            if (off == null) return;
-            Jump();
+            if (off == null)
+            {
+                return;
+            }
+                Jump();
 
 
             time++;
@@ -113,6 +127,7 @@ namespace multi_media_game
         private void mainForm_Load(object sender, EventArgs e)
         {
             off = new Bitmap(this.ClientSize.Width, this.ClientSize.Height);
+            createMap();
             this.label1.BackColor = Color.Transparent;
             if(f == 1)
             {
@@ -122,7 +137,16 @@ namespace multi_media_game
             groundY = LActs[0].Y;  
             DrawDubb(this.CreateGraphics());
         }
+        int scrollX = 0;
 
+        void createMap()
+        {
+            MuImage temp = new MuImage();
+            temp.sora = new Bitmap("form2.png");
+            temp.src = new Rectangle(0, 0, temp.sora.Width, temp.sora.Height);
+            temp.Dst = new Rectangle(0, 0, this.ClientSize.Width, this.ClientSize.Height);
+            lm.Add(temp);
+        }
         void creatHero()
         {
             Random RR = new Random();
@@ -153,16 +177,16 @@ namespace multi_media_game
 
         void DrawScene(Graphics g)
         {
-            if (this.BackgroundImage != null)
-            {
-                g.DrawImage(this.BackgroundImage, 0, 0, off.Width, off.Height);
+            g.Clear(Color.Black);
 
-            }
-            else
+            for (int i = 0; i < lm.Count; i++)
             {
-                g.Clear(Color.Green);
-
+                MuImage pnn = lm[i];
+                pnn.src = new Rectangle(scrollX, 0, this.ClientSize.Width, pnn.sora.Height);
+                pnn.Dst = new Rectangle(0, 0, this.ClientSize.Width, this.ClientSize.Height);
+                g.DrawImage(pnn.sora, pnn.Dst, pnn.src, GraphicsUnit.Pixel);
             }
+
             for (int i = 0; i < LActs.Count; i++)
             {
                 CACTor pTrv = LActs[i];
@@ -180,8 +204,17 @@ namespace multi_media_game
     public class CACTor
     {
         public int X, Y;
+        public Rectangle src;
+        public Rectangle Dst;
         public List<Bitmap> Imgs;
         public int IF;
+    }
+    public class MuImage
+    {
+        public Rectangle src;
+        public Rectangle Dst;
+        public Bitmap sora;
+        public bool isselected;
     }
 
 }
