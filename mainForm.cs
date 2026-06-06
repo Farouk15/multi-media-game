@@ -10,6 +10,7 @@ namespace multi_media_game
     {
         List<CACTor> LActs = new List<CACTor>();
         List<CACTor> coins = new List<CACTor>();
+        List<CEdges> edges = new List<CEdges>();
 
         List<MuImage> lm = new List<MuImage>();
 
@@ -151,10 +152,12 @@ namespace multi_media_game
             this.label1.BackColor = Color.Transparent;
             if(f == 1)
             {
-                this.Close(); 
+                this.Hide(); 
             }
+            createEdges();
             createCoins();
             creatHero();
+
             groundY = LActs[0].Y;  
             DrawDubb(this.CreateGraphics());
         }
@@ -183,13 +186,24 @@ namespace multi_media_game
             temp.Dst = new Rectangle(0, 0, this.ClientSize.Width, this.ClientSize.Height);
             lm.Add(temp);
         }
+
+        void createEdges()
+        {
+            CEdges pnn = new CEdges();
+            pnn.X = this.ClientSize.Height / 2 + 80;                          
+            pnn.Y = this.ClientSize.Height - 200; 
+            pnn.W = 100;                          
+            pnn.p = new Pen(Color.DarkGreen, 10);
+            edges.Add(pnn);
+        }
         void createCoins()
         {
+            CEdges ptravC = edges[0];
             Random RR = new Random();
             CACTor pnn = new CACTor();
 
-            pnn.X = this.ClientSize.Width / 3;
-            pnn.Y = this.ClientSize.Height / 2 + this.ClientSize.Height / 4 - 70;
+            pnn.X = ptravC.X + 20;
+            pnn.Y = ptravC.Y - 65;
             pnn.IF = RR.Next(8);
             pnn.Imgs = new List<Bitmap>();
 
@@ -252,6 +266,11 @@ namespace multi_media_game
                 CACTor pTrv = coins[i];
                 g.DrawImage(pTrv.Imgs[pTrv.IF], pTrv.X, pTrv.Y);
             }
+            for (int i = 0; i < edges.Count; i++)
+            {
+                CEdges pnn = edges[i];
+                g.DrawLine(pnn.p, pnn.X, pnn.Y, pnn.X + pnn.W, pnn.Y);
+            }
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -275,6 +294,12 @@ namespace multi_media_game
         public Rectangle Dst;
         public Bitmap sora;
         public bool isselected;
+    }
+    public class CEdges
+    {
+        public int X, Y;  
+        public int W;    
+        public Pen p;
     }
 
 }
