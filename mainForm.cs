@@ -279,7 +279,7 @@ namespace multi_media_game
             c.Show();
         }
     }
-
+    //er7m den omy 
     public class CACTor
     {
         public int X, Y;
