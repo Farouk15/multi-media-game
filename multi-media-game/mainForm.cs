@@ -47,7 +47,7 @@ namespace multi_media_game
         Timer tt = new Timer();
         int scrollX = 0;
         int f = 0;
-
+        int ctdamage = 0;
         public mainForm(int fo)
         {
 
@@ -307,43 +307,48 @@ namespace multi_media_game
         void movetiger()
         {
             CACTor ptrv = LActs[2];
-            if (ptrv.X > lm[0].sora.Width / 2 && ptrv.dir == 2)
+            if (ptrv.f7arka == 1)
             {
-                ptrv.X -= 10;
-                if (ptrv.IF >= 6 && ptrv.IF < 9)
+
+
+                if (ptrv.X > 0 && ptrv.dir == 2)
                 {
-                    ptrv.IF++;
+                    ptrv.X -= 10;
+                    if (ptrv.IF >= 6 && ptrv.IF < 9)
+                    {
+                        ptrv.IF++;
+
+                    }
+                    if (ptrv.IF == 9)
+                    {
+                        ptrv.IF = 6;
+                    }
+                    if (ptrv.X <= lm[0].sora.Width / 2 && ptrv.dir == 2)
+                    {
+                        ptrv.dir = 1;
+                        ptrv.IF = 0;
+
+                    }
 
                 }
-                if (ptrv.IF == 9)
+                if (ptrv.X + ptrv.Imgs[0].Width < lm[0].sora.Width && ptrv.dir == 1)
                 {
-                    ptrv.IF = 6;
-                }
-                if (ptrv.X <= lm[0].sora.Width / 2 && ptrv.dir == 2)
-                {
-                    ptrv.dir = 1;
-                    ptrv.IF = 0;
+                    ptrv.X += 10;
+                    if (ptrv.IF < 3)
+                    {
+                        ptrv.IF++;
 
-                }
+                    }
+                    if (ptrv.IF == 3)
+                    {
+                        ptrv.IF = 0;
+                    }
+                    if (ptrv.X + ptrv.Imgs[0].Width >= lm[0].sora.Width && ptrv.dir == 1)
+                    {
+                        ptrv.dir = 2;
+                        ptrv.IF = 6;
 
-            }
-            if (ptrv.X + ptrv.Imgs[0].Width < lm[0].sora.Width && ptrv.dir == 1)
-            {
-                ptrv.X += 10;
-                if (ptrv.IF < 3)
-                {
-                    ptrv.IF++;
-
-                }
-                if (ptrv.IF == 3)
-                {
-                    ptrv.IF = 0;
-                }
-                if (ptrv.X + ptrv.Imgs[0].Width >= lm[0].sora.Width && ptrv.dir == 1)
-                {
-                    ptrv.dir = 2;
-                    ptrv.IF = 6;
-
+                    }
                 }
             }
 
@@ -352,12 +357,71 @@ namespace multi_media_game
         {
             CACTor ptrvt = LActs[2];
             CACTor ptrvh = LActs[0];
+            if (ptrvt.f7arka == 3)
+            {
+                if (ptrvh.dir == 2)
+                {
+                    ptrvt.IF = 6;
+                }
+
+                ptrvt.f7arka = 1;
+            }
             if (ptrvt.X<=ptrvh.X+ptrvh.Imgs[0].Width
                 && ptrvt.X > ptrvh.X)
             {
-                ptrvh.X -= 200;
-                ptrvt.IF = 7;
+                ptrvh.f7arka = 4;
+                ptrvh.IF = 7;
             }
+            if (ptrvh.f7arka == 4)
+            {
+                if (ctdamage <= 4)
+                {
+                    ctdamage++;
+                    ptrvh.X -= 70;
+                    scrollX -= 70;
+                }
+                if (ctdamage == 5)
+                {
+                    ctdamage = 0;
+                    ptrvh.f7arka = 1;
+                }
+            }
+            if (ptrvt.X <= ptrvh.X + ptrvh.Imgs[0].Width + 250
+                && ptrvt.X > ptrvh.X && ptrvt.f7arka != 3)
+            {
+                ptrvt.dir = 2;
+                ptrvt.f7arka = 2;
+                if (ptrvt.IF < 9)
+                {
+
+
+                    ptrvt.IF = 9;
+                }
+            }
+            else
+            {
+                ptrvt.f7arka = 1;
+            }
+            if (ptrvt.f7arka == 2)
+            {
+                ptrvt.X -= 25;
+                if (ptrvt.IF >= 9 && ptrvt.IF<11)
+                {
+                    ptrvt.IF++;
+                }
+                if (ptrvt.IF == 11)
+                {
+                    ptrvt.IF = 9;
+                }
+            }
+            if (ptrvt.X <= ptrvh.X + ptrvh.Imgs[0].Width + 50
+                && ptrvt.X > ptrvh.X && ptrvt.f7arka != 3)
+            {
+                ptrvt.IF = 11;
+                ptrvt.X -= 20;
+                ptrvt.f7arka = 3;
+            }
+
         }
         void createhelicopter()
         {
