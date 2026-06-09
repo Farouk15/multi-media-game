@@ -157,6 +157,7 @@ namespace multi_media_game
             moveheli();
             //tiger
             movetiger();
+            attacktiger();
             DrawDubb(this.CreateGraphics());
 
         }
@@ -351,6 +352,12 @@ namespace multi_media_game
         {
             CACTor ptrvt = LActs[2];
             CACTor ptrvh = LActs[0];
+            if (ptrvt.X<=ptrvh.X+ptrvh.Imgs[0].Width
+                && ptrvt.X > ptrvh.X)
+            {
+                ptrvh.X -= 200;
+                ptrvt.IF = 7;
+            }
         }
         void createhelicopter()
         {
