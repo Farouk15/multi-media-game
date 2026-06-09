@@ -19,6 +19,7 @@ namespace multi_media_game
         public int IF;
         public int f7arka;
         public int dir;
+        public int health;
     }
     public class MuImage
     {
@@ -68,6 +69,7 @@ namespace multi_media_game
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             CACTor ptrv = LActs[0];
+            
             scrollX = ptrv.X - 200;
             if (e.KeyCode == Keys.Right)
             {
@@ -75,7 +77,7 @@ namespace multi_media_game
                 {
 
 
-                    ptrv.X += 10;
+                    ptrv.X += 20;
                     if (ptrv.IF < 2)
                     {
                         ptrv.IF++;
@@ -95,7 +97,7 @@ namespace multi_media_game
                 {
 
 
-                    ptrv.X -= 10;
+                    ptrv.X -= 20;
 
                     if (ptrv.IF >= 9 && ptrv.IF < 11)
                     {
@@ -151,6 +153,20 @@ namespace multi_media_game
         private void Tt_Tick(object sender, EventArgs e)
         {
             CACTor ptrv = LActs[0];
+            if (ptrv.health == 3)
+            {
+
+                for (int i = LActs.Count - 1; i >= 0; i--)
+                {
+                    LActs.Remove(LActs[i]);
+
+                }
+                createHero();
+                createhelicopter();
+                createtiger();
+                scrollX = 0;
+
+            }
             //hero
             herojump();
             //helicopter
@@ -221,6 +237,7 @@ namespace multi_media_game
             pnn.IF = 0;
             pnn.dir = 1;
             pnn.f7arka = 1;
+            pnn.health = 0;
             for (int i = 0; i < 18; i++)
             {
                 Bitmap pnnSora = new Bitmap("" + (i + 1) + "hh.png");
@@ -366,11 +383,12 @@ namespace multi_media_game
 
                 ptrvt.f7arka = 1;
             }
-            if (ptrvt.X<=ptrvh.X+ptrvh.Imgs[0].Width
+            if (ptrvt.X<=ptrvh.X+ptrvh.Imgs[0].Width -20
                 && ptrvt.X > ptrvh.X)
             {
                 ptrvh.f7arka = 4;
                 ptrvh.IF = 7;
+                ptrvh.health++;
             }
             if (ptrvh.f7arka == 4)
             {
@@ -414,7 +432,7 @@ namespace multi_media_game
                     ptrvt.IF = 9;
                 }
             }
-            if (ptrvt.X <= ptrvh.X + ptrvh.Imgs[0].Width + 50
+            if (ptrvt.X <= ptrvh.X + ptrvh.Imgs[0].Width + 30
                 && ptrvt.X > ptrvh.X && ptrvt.f7arka != 3)
             {
                 ptrvt.IF = 11;
