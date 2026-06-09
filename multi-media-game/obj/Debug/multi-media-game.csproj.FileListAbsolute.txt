@@ -34,3 +34,15 @@ E:\MSA\2nd year\sem_2\multimedia\multi-media-game2\multi-media-game\multi-media-
 E:\MSA\2nd year\sem_2\multimedia\multi-media-game2\multi-media-game\multi-media-game\obj\Debug\multi-media-game.exe
 E:\MSA\2nd year\sem_2\multimedia\multi-media-game2\multi-media-game\multi-media-game\obj\Debug\multi-media-game.pdb
 E:\MSA\2nd year\sem_2\multimedia\multi-media-game2\multi-media-game\multi-media-game\obj\Debug\multi_media_game.CACTor.resources
+C:\Users\iRepair\source\repos\multi-game\multi-media-game\multi-media-game\bin\Debug\multi-media-game.exe.config
+C:\Users\iRepair\source\repos\multi-game\multi-media-game\multi-media-game\bin\Debug\multi-media-game.exe
+C:\Users\iRepair\source\repos\multi-game\multi-media-game\multi-media-game\bin\Debug\multi-media-game.pdb
+C:\Users\iRepair\source\repos\multi-game\multi-media-game\multi-media-game\obj\Debug\multi-media-game.csproj.AssemblyReference.cache
+C:\Users\iRepair\source\repos\multi-game\multi-media-game\multi-media-game\obj\Debug\multi_media_game.close.resources
+C:\Users\iRepair\source\repos\multi-game\multi-media-game\multi-media-game\obj\Debug\multi_media_game.Form1.resources
+C:\Users\iRepair\source\repos\multi-game\multi-media-game\multi-media-game\obj\Debug\multi_media_game.Properties.Resources.resources
+C:\Users\iRepair\source\repos\multi-game\multi-media-game\multi-media-game\obj\Debug\multi-media-game.csproj.GenerateResource.cache
+C:\Users\iRepair\source\repos\multi-game\multi-media-game\multi-media-game\obj\Debug\multi-media-game.csproj.CoreCompileInputs.cache
+C:\Users\iRepair\source\repos\multi-game\multi-media-game\multi-media-game\obj\Debug\multi-media-game.exe
+C:\Users\iRepair\source\repos\multi-game\multi-media-game\multi-media-game\obj\Debug\multi-media-game.pdb
+C:\Users\iRepair\source\repos\multi-game\multi-media-game\multi-media-game\obj\Debug\multi_media_game.CACTor.resources

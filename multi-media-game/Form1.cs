@@ -43,6 +43,7 @@ namespace multi_media_game
                     mainForm f = new mainForm(g);
                     f.Show();
                 }
+
                 time++;
             }
             DrawDubb(this.CreateGraphics());
