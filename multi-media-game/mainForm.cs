@@ -198,10 +198,11 @@ namespace multi_media_game
                 if(levelState == 0)
                 {
                     createhelicopter();
-                    //createtiger();
 
                 }
-                scrollX = 0;
+                scrollX = 0;  
+                //createtiger();
+
 
             }
             //hero
@@ -212,10 +213,10 @@ namespace multi_media_game
                 moveheli();
 
             }
-
+                //movetiger();
+                //attacktiger();
             //tiger
-            //movetiger();
-            //attacktiger();
+
             CACTor ptrvGate = LActsgates[0];
             if(t % 4 == 0)
             {
@@ -259,11 +260,12 @@ namespace multi_media_game
             if(levelState == 0)
             {
                 createhelicopter();
-                //createtiger();
                 createCoins(incX);
 
             }
-                        
+                                   //
+                                   //createtiger();
+     
 
 
             DrawDubb(this.CreateGraphics());
