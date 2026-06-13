@@ -78,7 +78,7 @@ namespace multi_media_game
         int tS = 0;
         int tot = 0;
         int tot2 = 0;
-        bool isGameOver = false;
+
 
         public mainForm(int fo)
         {
@@ -212,74 +212,64 @@ namespace multi_media_game
         /////////////////////////////////////////////////////////////////////////////////////
         private void Tt_Tick(object sender, EventArgs e)
         {
-            if(isGameOver == true)
-            {
-                gameOver();
+            CACTor ptrv = LActs[0];
 
-            }
-            else
+            if (ptrv.health <= 0) 
             {
-                CACTor ptrv = LActs[0];
+                LActs.Clear(); 
+                createHero(); 
 
-                if (ptrv.health <= 0) 
+                if(levelState == 0)
                 {
-                    LActs.Clear(); 
-                    createHero(); 
-
-                    if(levelState == 0)
-                    {
-                        createhelicopter(); 
-                        createtiger(); 
-                    }
-                    scrollX = 0;   
-                    return; 
+                    createhelicopter(); 
+                    createtiger(); 
                 }
+                scrollX = 0;   
+                return; 
+            }
 
-                herojump();
-                ForMessage();
+            herojump();
+            ForMessage();
     
-                if (levelState == 0)
-                {
-                    moveheli(); 
-                    movetiger();  
-                    attacktiger(); 
-                }
-                if(levelState == 1)
-                {
-                    moveSpikes(tS);
-                    tS++;
-                }
-
-                CACTor ptrvGate = LActsgates[0];
-                if(t % 4 == 0)
-                {
-                    ptrvGate.IF +=1;
-                }
-                if (t % 30 == 0 && levelState == 0)
-                {
-                    CreateBUlletsForHELI(tH); 
-                }
-
-                MoveBulletForHEli(); 
-                moveBulletHero();
-                tH++;
-                if(ptrvGate.IF >= ptrvGate.Imgs.Count)
-                {
-                    ptrvGate.IF = 0;
-                }
-                t++;
-                for (int i = 0; i < coins.Count; i++)
-                {
-                    coins[i].IF = (coins[i].IF + 1) % 8;
-                }
-                Damage();
-                getCoins();
-                level2();
-                DrawDubb(this.CreateGraphics());
-
+            if (levelState == 0)
+            {
+                moveheli(); 
+                movetiger();  
+                attacktiger(); 
+            }
+            if(levelState == 1)
+            {
+                moveSpikes(tS);
+                tS++;
             }
 
+            CACTor ptrvGate = LActsgates[0];
+            if(t % 4 == 0)
+            {
+                ptrvGate.IF +=1;
+            }
+            if (t % 30 == 0 && levelState == 0)
+            {
+                CreateBUlletsForHELI(tH); 
+            }
 
+            MoveBulletForHEli(); 
+            moveBulletHero();
+            tH++;
+            if(ptrvGate.IF >= ptrvGate.Imgs.Count)
+            {
+                ptrvGate.IF = 0;
+            }
+            t++;
+            for (int i = 0; i < coins.Count; i++)
+            {
+                coins[i].IF = (coins[i].IF + 1) % 8;
+            }
+            Damage();
+            getCoins();
+            level2();
+            gameOver();
+            DrawDubb(this.CreateGraphics());
         }
         //////////////////////////////////////////////////////////////////////////////
         private void mainForm_Load(object sender, EventArgs e)
@@ -316,7 +306,6 @@ namespace multi_media_game
 
             if(ptravH.health == 0)
             {
-                isGameOver = true;
                 muPtrav.sora = new Bitmap("maps/map3.png");
                 //LActs.Clear();
                 
@@ -522,33 +511,25 @@ namespace multi_media_game
         }
         void moveBulletHero()
         {
-            if (LActTiger.Count == 0)
+            for (int i = 0; i < LActsHeroBullet.Count; i++)
             {
-                return; 
-            }
+                CACTor ptraB = LActsHeroBullet[i];
+                ptraB.X += 60;
 
-            for (int k = 0; k < LActTiger.Count(); k++)
-            {
-                CACTor ptrvTiger = LActTiger[k];
-        
-                for (int i = 0; i < LActsHeroBullet.Count(); i++)
+                if (LActs != null && LActs.Count > 0 && ptraB.X > LActs[0].X + 780)
                 {
-                    CACTor ptraB = LActsHeroBullet[i];
-                    ptraB.X += 60;
+                    LActsHeroBullet.RemoveAt(i);
+                    i--; 
+                }
+                else 
+                {
+                    for (int k = 0; k < LActTiger.Count; k++)
+                    {
+                        CACTor ptrvTiger = LActTiger[k];
 
-                    if (LActs != null && LActs.Count > 0 && ptraB.X > LActs[0].X + 780)
-                    {
-                        LActsHeroBullet.RemoveAt(i);
-                        i--; 
-                    }
-                    else 
-                    {
                         if (ptraB.X > ptrvTiger.X && ptraB.X < ptrvTiger.X + ptrvTiger.Imgs[0].Width 
                             && ptraB.Y > ptrvTiger.Y && ptraB.Y < ptrvTiger.Y + ptrvTiger.Imgs[0].Height)
                         {
-                            LActsHeroBullet.RemoveAt(i);
-                            i--;
-
                             ptrvTiger.health--;
 
                             if (ptrvTiger.health <= 0)
@@ -556,12 +537,15 @@ namespace multi_media_game
                                 LActTiger.RemoveAt(k);
                                 k--; 
                                 Meess = 4;
-                                
+                        
                                 if (KillTiger <= 2)
                                 {
                                     KillTiger++;
                                 }
                             }
+
+                            LActsHeroBullet.RemoveAt(i);
+                            i--;
                     
                             break; 
                         }
