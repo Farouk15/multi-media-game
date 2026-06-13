@@ -22,6 +22,8 @@ namespace multi_media_game
         public int coins;
         public int bullets = 10;
         public int health;
+        public int spikeDamage = 2;
+
         public Brush br;
     }
     public class MuImage
@@ -43,21 +45,14 @@ namespace multi_media_game
     {
         List<CACTor> LActs = new List<CACTor>();
         List<CACTor> LActTiger = new List<CACTor>();
-
         List<CACTor> LActsgates = new List<CACTor>();
         List<CACTor> LActsVEn = new List<CACTor>();
         List<CACTor> LActsHeroBullet = new List<CACTor>();
-
-
+        List<CACTor> LActsSpikes = new List<CACTor>();
         List<CACTor> LActsBUlletsHeli = new List<CACTor>();
-
-
         List<CACTor> coins = new List<CACTor>();
         List<CACTor> pC = new List<CACTor>();
-
         List<CEdges> edges = new List<CEdges>();
-
-
         List<MuImage> lm = new List<MuImage>();
 
         Bitmap off;
@@ -78,6 +73,13 @@ namespace multi_media_game
         int Meess = 0;
         int Onetime = 0;
         int KillTiger = 0;
+        int spikeD=0;
+        int spikeR=0;
+        int tS = 0;
+        int tot = 0;
+        int tot2 = 0;
+
+
         public mainForm(int fo)
         {
 
@@ -235,6 +237,11 @@ namespace multi_media_game
                 movetiger();  
                 attacktiger(); 
             }
+            if(levelState == 1)
+            {
+                moveSpikes(tS);
+                tS++;
+            }
 
             CACTor ptrvGate = LActsgates[0];
             if(t % 4 == 0)
@@ -286,13 +293,9 @@ namespace multi_media_game
                 createGate();
             }
             //
-                     attacktiger();
-
-
+            attacktiger();
 
             DrawDubb(this.CreateGraphics());
-
-
         }
         /////////////////////////////////////////////////////////////////////////
         ///
@@ -353,6 +356,7 @@ namespace multi_media_game
                 levelState = 1;
                 coins.Clear();
                 createVendingmachine();
+                createSpikes();
                 //createPC();
             }
         }
@@ -366,7 +370,87 @@ namespace multi_media_game
             lm.Add(temp);
         }
         ////////////////////////////////////////////////////////////////////
-        ///        
+        ///      
+        void moveSpikes(int t)
+        {
+            for(int i = 0 ; i < LActsSpikes.Count ; i++)
+            {
+                CACTor ptravS = LActsSpikes[i];
+                if(i % 2 == 0)
+                {
+                    if(spikeD == 0)
+                    {
+                        ptravS.Y -=10;
+                        tot+=10;
+                        if(tot > 280)
+                        {
+                            spikeD = 1;
+                        }
+                    }
+                    if(spikeD == 1)
+                    {
+                        ptravS.Y +=10;
+                        tot -=10;
+                        if(tot < 0)
+                        {
+                            spikeD = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    if(tS > 30)
+                    {
+                        if(spikeR == 0)
+                        {
+                            ptravS.Y -=10;
+                            tot2+=10;
+                            if(tot2 > 180)
+                            {
+                                spikeR = 1;
+                            }
+                        }
+                        if(spikeR == 1)
+                        {
+                            ptravS.Y +=10;
+                            tot2 -=10;
+                            if(tot2 < 0)
+                            {
+                                spikeR = 0;
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+        void createSpikes()
+        {
+            int adX = 0;
+            for (int b =0 ; b < 3 ; b++)
+            {
+                CACTor pnn = new CACTor();
+
+
+                pnn.Imgs = new List<Bitmap>();
+                pnn.IF = 0;
+                pnn.dir = 1;
+                pnn.f7arka = 1;
+                for (int i = 0; i < 1; i++)
+                {
+                    Bitmap pnnSora = new Bitmap("spike/" + "spike.png");
+                    pnnSora.MakeTransparent(Color.White);
+                    pnn.Imgs.Add(pnnSora);
+
+                }
+                adX = pnn.Imgs[0].Width;
+
+                pnn.X = this.ClientSize.Width / 2 + b * adX;
+                pnn.Y = this.ClientSize.Height / 2 + this.ClientSize.Height / 4 + 220;
+                LActsSpikes.Add(pnn);
+            }
+
+        }
         void Damage()
         {
             CACTor heroPtrav = LActs[0];
@@ -388,10 +472,28 @@ namespace multi_media_game
                             heroPtrav.health--; 
 
                         }
-            
                         LActsBUlletsHeli.RemoveAt(i);
                     }
 
+                }
+            }
+
+            for(int i = 0 ; i< LActsSpikes.Count() ;i++)
+            {
+                CACTor ptravS = LActsSpikes[0];
+                if (ptravS.X > heroPtrav.X && 
+                ptravS.X < heroPtrav.X + heroPtrav.Imgs[0].Width && 
+                ptravS.Y > heroPtrav.Y && 
+                ptravS.Y < heroPtrav.Y + heroPtrav.Imgs[0].Height)
+                {  
+                    if(heroPtrav.health >= 0)
+                    {
+                        if(ptravS.spikeDamage >= 0)
+                        {
+                            heroPtrav.health--; 
+                            ptravS.spikeDamage--;
+                        }
+                    }                
                 }
             }
         }
@@ -430,7 +532,7 @@ namespace multi_media_game
                             {
                                 LActTiger.RemoveAt(k);
                                 k--; 
-
+                                Meess = 4;
                                 
                                 if (KillTiger <= 2)
                                 {
@@ -438,7 +540,7 @@ namespace multi_media_game
                                 }
                             }
                     
-                            break; // Stop processing this bullet since it hit a target
+                            break; 
                         }
                     }
                 }
@@ -721,7 +823,7 @@ namespace multi_media_game
             pnn.IF = 0;
             pnn.dir = 1;
             pnn.f7arka = 1;
-            pnn.health = 2; // <-- ADD THIS LINE: Tiger starts with 2 health points
+            pnn.health = 2;
             pnn.coins = 0;
 
             for (int i = 0; i < 12; i++)
@@ -997,6 +1099,11 @@ namespace multi_media_game
                 CACTor pTrv = LActTiger[i];
                 g.DrawImage(pTrv.Imgs[pTrv.IF], pTrv.X - scrollX, pTrv.Y);
             }
+            for (int i = 0; i < LActsSpikes.Count; i++)
+            {
+                CACTor pTrv = LActsSpikes[i];
+                g.DrawImage(pTrv.Imgs[pTrv.IF], pTrv.X - scrollX, pTrv.Y);
+            }
             if (LActs.Count == 0){
                 return;
             }
@@ -1019,11 +1126,14 @@ namespace multi_media_game
                 g.DrawString("message: " + "press d to Drink", f, b, this.ClientSize.Width / 3 + 350, 20);
 
             }
-            if (Meess == 3  )
+            if (Meess == 3)
             {
                 g.DrawString("message: " + "Your heath increased by 2", f, b, this.ClientSize.Width / 3 + 350, 20);
                 g.DrawString("message: " + "Your Ammor increased by 5", f, b, this.ClientSize.Width / 3 + 350, 50);
-
+            }
+            if (Meess == 4)
+            {
+                g.DrawString("message: " + "You killed the tiger", f, b, this.ClientSize.Width / 3 + 350, 20);
 
             }
 
