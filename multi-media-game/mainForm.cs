@@ -78,7 +78,7 @@ namespace multi_media_game
         int tS = 0;
         int tot = 0;
         int tot2 = 0;
-
+        bool isGameOver = false;
 
         public mainForm(int fo)
         {
@@ -212,64 +212,74 @@ namespace multi_media_game
         /////////////////////////////////////////////////////////////////////////////////////
         private void Tt_Tick(object sender, EventArgs e)
         {
-            CACTor ptrv = LActs[0];
-
-            if (ptrv.health <= 0) 
+            if(isGameOver == true)
             {
-                LActs.Clear(); 
-                createHero(); 
+                gameOver();
 
-                if(levelState == 0)
+            }
+            else
+            {
+                CACTor ptrv = LActs[0];
+
+                if (ptrv.health <= 0) 
                 {
-                    createhelicopter(); 
-                    createtiger(); 
+                    LActs.Clear(); 
+                    createHero(); 
+
+                    if(levelState == 0)
+                    {
+                        createhelicopter(); 
+                        createtiger(); 
+                    }
+                    scrollX = 0;   
+                    return; 
                 }
-                scrollX = 0;   
-                return; 
-            }
 
-            herojump();
-            ForMessage();
+                herojump();
+                ForMessage();
     
-            if (levelState == 0)
-            {
-                moveheli(); 
-                movetiger();  
-                attacktiger(); 
-            }
-            if(levelState == 1)
-            {
-                moveSpikes(tS);
-                tS++;
+                if (levelState == 0)
+                {
+                    moveheli(); 
+                    movetiger();  
+                    attacktiger(); 
+                }
+                if(levelState == 1)
+                {
+                    moveSpikes(tS);
+                    tS++;
+                }
+
+                CACTor ptrvGate = LActsgates[0];
+                if(t % 4 == 0)
+                {
+                    ptrvGate.IF +=1;
+                }
+                if (t % 30 == 0 && levelState == 0)
+                {
+                    CreateBUlletsForHELI(tH); 
+                }
+
+                MoveBulletForHEli(); 
+                moveBulletHero();
+                tH++;
+                if(ptrvGate.IF >= ptrvGate.Imgs.Count)
+                {
+                    ptrvGate.IF = 0;
+                }
+                t++;
+                for (int i = 0; i < coins.Count; i++)
+                {
+                    coins[i].IF = (coins[i].IF + 1) % 8;
+                }
+                Damage();
+                getCoins();
+                level2();
+                DrawDubb(this.CreateGraphics());
+
             }
 
-            CACTor ptrvGate = LActsgates[0];
-            if(t % 4 == 0)
-            {
-                ptrvGate.IF +=1;
-            }
-            if (t % 30 == 0 && levelState == 0)
-            {
-                CreateBUlletsForHELI(tH); 
-            }
 
-            MoveBulletForHEli(); 
-            moveBulletHero();
-            tH++;
-            if(ptrvGate.IF >= ptrvGate.Imgs.Count)
-            {
-                ptrvGate.IF = 0;
-            }
-            t++;
-            for (int i = 0; i < coins.Count; i++)
-            {
-                coins[i].IF = (coins[i].IF + 1) % 8;
-            }
-            Damage();
-            getCoins();
-            level2();
-
-            DrawDubb(this.CreateGraphics());
         }
         //////////////////////////////////////////////////////////////////////////////
         private void mainForm_Load(object sender, EventArgs e)
@@ -299,6 +309,19 @@ namespace multi_media_game
         }
         /////////////////////////////////////////////////////////////////////////
         ///
+        void gameOver()
+        {
+            CACTor ptravH = LActs[0];
+            MuImage muPtrav = lm[0];
+
+            if(ptravH.health == 0)
+            {
+                isGameOver = true;
+                muPtrav.sora = new Bitmap("maps/map3.png");
+                //LActs.Clear();
+                
+            }
+        }
         void ForMessage()
         {
             if (LActs.Count == 0) { 
@@ -349,7 +372,7 @@ namespace multi_media_game
             {
                 Meess = 0;
                 muPtrav.sora = new Bitmap("maps/map2.png");
-
+                mission = 2;
                 heroPtrav.X = startPointX;
                 scrollX = 0;
                 move = 0;
@@ -605,9 +628,14 @@ namespace multi_media_game
 
             if(heroPtrav.X >= muPtrav.X && heroPtrav.X <= muPtrav.X + muPtrav.Imgs[0].Width)
             {
-                heroPtrav.health +=2;
-                heroPtrav.bullets +=5;
-                Meess = 3;
+                if(heroPtrav.coins == 3)
+                {
+                    heroPtrav.health +=2;
+                    heroPtrav.bullets +=5;
+                    heroPtrav.coins-=3;
+                    Meess = 3;
+                }
+
 
             }
         }
@@ -908,7 +936,7 @@ namespace multi_media_game
             {
                 ptrvh.f7arka = 4;
                 ptrvh.IF = 7;
-                ptrvh.health++;
+                ptrvh.health--;
             }
             if (ptrvh.f7arka == 4)
             {
@@ -931,8 +959,6 @@ namespace multi_media_game
                 ptrvt.f7arka = 2;
                 if (ptrvt.IF < 9)
                 {
-
-
                     ptrvt.IF = 9;
                 }
             }
@@ -1124,6 +1150,8 @@ namespace multi_media_game
             if (Meess == 2 && Onetime != 1 )
             {
                 g.DrawString("message: " + "press d to Drink", f, b, this.ClientSize.Width / 3 + 350, 20);
+                g.DrawString("message: " + "you Must have 3 coins", f, b, this.ClientSize.Width / 3 + 350, 50);
+
 
             }
             if (Meess == 3)
