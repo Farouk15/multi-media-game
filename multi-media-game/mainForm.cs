@@ -54,6 +54,10 @@ namespace multi_media_game
         List<CACTor> pC = new List<CACTor>();
         List<CEdges> edges = new List<CEdges>();
         List<MuImage> lm = new List<MuImage>();
+        List<CACTor> slm = new List<CACTor>();
+        List<CACTor> platform = new List<CACTor>();
+
+
         Bitmap off;
         Timer tt = new Timer();
         int scrollX = 0;
@@ -78,7 +82,7 @@ namespace multi_media_game
         int tot = 0;
         int tot2 = 0;
 
-
+        int flagplat=0;
         public mainForm(int fo)
         {
 
@@ -98,13 +102,12 @@ namespace multi_media_game
         {
             DrawDubb(e.Graphics);
         }
-
         //////////////////////////////////////////////////////////////////////////////////////
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             CACTor ptrv = LActs[0];
             
-            if( scrollX < this.ClientSize.Width - 330)
+            if( scrollX < this.ClientSize.Width/2 )
             {
                 scrollX = ptrv.X - 60;
 
@@ -113,7 +116,8 @@ namespace multi_media_game
             CACTor heroPtrav = LActs[0];
             if (e.KeyCode == Keys.M)
             {
-                if(heroPtrav.X >= muPtrav.X && heroPtrav.X <= muPtrav.X + muPtrav.Imgs[0].Width)
+                if(heroPtrav.X >= muPtrav.X && heroPtrav.X <= muPtrav.X + muPtrav.Imgs[0].Width
+                    && ptrv.Y<muPtrav.Y + muPtrav.Imgs[0].Height / 2)
                 {
                     move = 1;
 
@@ -123,6 +127,7 @@ namespace multi_media_game
             {
                 if (ptrv.X + ptrv.Imgs[0].Width < lm[0].sora.Width)
                 {
+
 
                     ptrv.X += 20;
                     if (ptrv.IF < 2)
@@ -153,6 +158,28 @@ namespace multi_media_game
                         ptrv.IF = 9;
                     }
                     ptrv.dir = 2;
+                }
+            }
+            if (e.KeyCode == Keys.Up)
+            {
+                if (ptrv.X + ptrv.Imgs[0].Width/2 >= slm[0].X
+                    && ptrv.X < slm[0].X + slm[0].Imgs[0].Width/2)
+                {
+                    if (ptrv.Y + ptrv.Imgs[0].Height/2 +50 >= slm[0].Y)
+                    {
+                        ptrv.Y -= 10;
+                    }
+                }
+            }
+            if (e.KeyCode == Keys.Down)
+            {
+                if (ptrv.X + ptrv.Imgs[0].Width/2 >= slm[0].X
+                    && ptrv.X < slm[0].X + slm[0].Imgs[0].Width/2)
+                {
+                    if (ptrv.Y <=(this.ClientSize.Height / 2 + this.ClientSize.Height / 4 - 90))
+                    {
+                        ptrv.Y += 10;
+                    }
                 }
             }
             if (e.KeyCode == Keys.F)
@@ -198,6 +225,7 @@ namespace multi_media_game
                 createBullethero();
             }
 
+
             if (e.KeyCode == Keys.D)
             {
                 if(Onetime == 0)
@@ -205,6 +233,15 @@ namespace multi_media_game
                     ControlHealth();
                     Onetime = 1;
                 }
+            }
+            //platform
+            if (e.KeyCode == Keys.T)
+            {
+                platform[1].dir = 2;
+            }
+            if (e.KeyCode == Keys.G)
+            {
+                platform[1].dir = 1;
             }
         }
         /////////////////////////////////////////////////////////////////////////////////////
@@ -248,7 +285,7 @@ namespace multi_media_game
             }
             if (t % 30 == 0 && levelState == 0)
             {
-                CreateBUlletsForHELI(tH);
+                CreateBUlletsForHELI(tH); 
             }
 
             MoveBulletForHEli(); 
@@ -267,6 +304,12 @@ namespace multi_media_game
             getCoins();
             level2();
             gameOver();
+            if (flagplat==1)
+            {
+
+
+                moveplatform();
+            }
             DrawDubb(this.CreateGraphics());
         }
         //////////////////////////////////////////////////////////////////////////////
@@ -285,16 +328,18 @@ namespace multi_media_game
 
             if(levelState == 0)
             {
+                createslm();
                 createhelicopter();
                 createCoins(incX);
                 createtiger();
                 createGate();
             }
+            //
             attacktiger();
-
             DrawDubb(this.CreateGraphics());
         }
         /////////////////////////////////////////////////////////////////////////
+        ///
         void gameOver()
         {
             CACTor ptravH = LActs[0];
@@ -307,7 +352,6 @@ namespace multi_media_game
                 
             }
         }
-
         void ForMessage()
         {
             if (LActs.Count == 0) { 
@@ -366,6 +410,8 @@ namespace multi_media_game
                 coins.Clear();
                 createVendingmachine();
                 createSpikes();
+                createplatform();
+                flagplat = 1;
                 //createPC();
             }
         }
@@ -433,7 +479,6 @@ namespace multi_media_game
                 }
             }
         }
-
         void createSpikes()
         {
             int adX = 0;
@@ -461,7 +506,72 @@ namespace multi_media_game
             }
 
         }
+        void createslm()
+        {
+            CACTor pnn = new CACTor();
 
+
+            pnn.Imgs = new List<Bitmap>();
+            Bitmap pnnSora = new Bitmap("slm/" + "slm.png");
+            pnnSora.MakeTransparent(Color.White);
+            pnn.Imgs.Add(pnnSora);
+
+
+            pnn.X = lm[0].sora.Width-(pnn.Imgs[0].Width*3);
+            pnn.Y = this.ClientSize.Height - pnn.Imgs[0].Height - 100;
+            slm.Add(pnn);
+            pnn = new CACTor();
+
+
+            pnn.Imgs = new List<Bitmap>();
+            pnnSora = new Bitmap("slm/" + "tree.png");
+            pnnSora.MakeTransparent(Color.White);
+            pnn.Imgs.Add(pnnSora);
+
+
+            pnn.X = lm[0].sora.Width- pnn.Imgs[0].Width ;
+            pnn.Y = slm[0].Y -pnn.Imgs[0].Height/6 ;
+            slm.Add(pnn);
+        }
+        void createplatform()
+        {
+            CACTor pnn = new CACTor();
+
+
+            pnn.Imgs = new List<Bitmap>();
+            Bitmap pnnSora = new Bitmap("slm/" + "mtree.png");
+            pnnSora.MakeTransparent(Color.White);
+            pnn.Imgs.Add(pnnSora);
+
+
+            pnn.X = 0;
+            pnn.Y = slm[1].Y;
+            platform.Add(pnn);
+            pnn = new CACTor();
+
+
+            pnn.Imgs = new List<Bitmap>();
+            pnnSora = new Bitmap("slm/" + "platform.png");
+            pnnSora.MakeTransparent(Color.White);
+            pnn.Imgs.Add(pnnSora);
+
+            pnn.dir = 0;
+            pnn.X = platform[0].X +platform[0].Imgs[0].Width;
+            pnn.Y = platform[0].Y;
+            platform.Add(pnn);
+        }
+        void moveplatform()
+        {
+            CACTor ptrv = platform[1];
+            if (ptrv.Y + ptrv.Imgs[0].Height <= this.ClientSize.Height && ptrv.dir == 1)
+            {
+                ptrv.Y += 5;
+            }
+            if (ptrv.Y>= platform[0].Y && ptrv.dir == 2)
+            {
+                ptrv.Y -= 5;
+            }
+        }
         void Damage()
         {
             CACTor heroPtrav = LActs[0];
@@ -489,7 +599,7 @@ namespace multi_media_game
                 }
             }
 
-            for(int i = 0 ; i< LActsSpikes.Count(); i++)
+            for(int i = 0 ; i< LActsSpikes.Count() ;i++)
             {
                 CACTor ptravS = LActsSpikes[0];
                 if (ptravS.X > heroPtrav.X && 
@@ -510,47 +620,60 @@ namespace multi_media_game
         }
         void moveBulletHero()
         {
-            for (int i = 0; i < LActsHeroBullet.Count; i++)
-            {
-                CACTor ptraB = LActsHeroBullet[i];
-                ptraB.X += 60;
 
-                if (LActs != null && LActs.Count > 0 && ptraB.X > LActs[0].X + 780)
+
+
+                for (int i = 0; i < LActsHeroBullet.Count; i++)
                 {
-                    LActsHeroBullet.RemoveAt(i);
-                    i--; 
-                }
-                else 
-                {
-                    for (int k = 0; k < LActTiger.Count; k++)
+                    CACTor ptraB = LActsHeroBullet[i];
+                    if (ptraB.dir == 1)
                     {
-                        CACTor ptrvTiger = LActTiger[k];
 
-                        if (ptraB.X > ptrvTiger.X && ptraB.X < ptrvTiger.X + ptrvTiger.Imgs[0].Width 
-                            && ptraB.Y > ptrvTiger.Y && ptraB.Y < ptrvTiger.Y + ptrvTiger.Imgs[0].Height)
+
+                        ptraB.X += 60;
+                    }
+                    if (ptraB.dir==2)
+                    {
+                        ptraB.X -= 60;
+
+                    }
+                    if (LActs != null && LActs.Count > 0 && ptraB.X > LActs[0].X + 780)
+                    {
+                        LActsHeroBullet.RemoveAt(i);
+                        i--;
+                    }
+                    else
+                    {
+                        for (int k = 0; k < LActTiger.Count; k++)
                         {
-                            ptrvTiger.health--;
+                            CACTor ptrvTiger = LActTiger[k];
 
-                            if (ptrvTiger.health <= 0)
+                            if (ptraB.X > ptrvTiger.X && ptraB.X < ptrvTiger.X + ptrvTiger.Imgs[0].Width
+                                && ptraB.Y > ptrvTiger.Y && ptraB.Y < ptrvTiger.Y + ptrvTiger.Imgs[0].Height)
                             {
-                                LActTiger.RemoveAt(k);
-                                k--; 
-                                Meess = 4;
-                        
-                                if (KillTiger <= 2)
-                                {
-                                    KillTiger++;
-                                }
-                            }
+                                ptrvTiger.health--;
 
-                            LActsHeroBullet.RemoveAt(i);
-                            i--;
-                    
-                            break; 
+                                if (ptrvTiger.health <= 0)
+                                {
+                                    LActTiger.RemoveAt(k);
+                                    k--;
+                                    Meess = 4;
+
+                                    if (KillTiger <= 2)
+                                    {
+                                        KillTiger++;
+                                    }
+                                }
+
+                                LActsHeroBullet.RemoveAt(i);
+                                i--;
+
+                                break;
+                            }
                         }
                     }
                 }
-            }
+            
         }
         void createBullethero()
         {
@@ -560,11 +683,25 @@ namespace multi_media_game
                 heroPtrav.bullets--;
 
                 CACTor pnn = new CACTor();
-                pnn.X = heroPtrav.X + 10 + heroPtrav.Imgs[0].Width;
                 pnn.Y = heroPtrav.Y + 75;
                 pnn.Imgs = new List<Bitmap>();
                 pnn.IF = 0;
-                pnn.dir = 1;
+                if (heroPtrav.dir == 1)
+                {
+
+
+                    pnn.dir = 1;
+                    pnn.X = heroPtrav.X + 10 + heroPtrav.Imgs[0].Width;
+
+                }
+                if (heroPtrav.dir == 2)
+                {
+
+
+                    pnn.dir = 2;
+                    pnn.X = heroPtrav.X ;
+
+                }
                 pnn.f7arka = 1;
                 pnn.health = 0;
                 pnn.coins = 0;
@@ -618,6 +755,8 @@ namespace multi_media_game
                     heroPtrav.coins-=3;
                     Meess = 3;
                 }
+
+
             }
         }
         void createPC()
@@ -687,7 +826,7 @@ namespace multi_media_game
         {
             CACTor pnn = new CACTor();
 
-            pnn.X =  startPointX + 300;
+            pnn.X =  lm[0].sora.Width/25;
             pnn.Imgs = new List<Bitmap>();
             pnn.IF = 0;
             pnn.dir = 1;
@@ -698,8 +837,9 @@ namespace multi_media_game
                 pnnSora.MakeTransparent();
 
                 pnn.Imgs.Add(pnnSora);
+
             }
-            pnn.Y = startPointY + 200;
+            pnn.Y = this.ClientSize.Height-pnn.Imgs[0].Height-100;
 
             LActsVEn.Add(pnn);
         }
@@ -724,6 +864,7 @@ namespace multi_media_game
                     pnnSora.MakeTransparent(pnnSora.GetPixel(0, 0));
                     pnn.Imgs.Add(pnnSora);
                 }
+
                 coins.Add(pnn);
                 x+=350;
             }
@@ -733,6 +874,7 @@ namespace multi_media_game
         void getCoins()
         {
             CACTor hero = LActs[0];
+            
             for (int i = coins.Count - 1; i >= 0; i--)
             {
                 CACTor coin = coins[i];
@@ -802,7 +944,6 @@ namespace multi_media_game
         {
             CACTor pnn = new CACTor();
 
-            pnn.X =  this.ClientSize.Height *3 - 200;
             pnn.Imgs = new List<Bitmap>();
             pnn.IF = 0;
             pnn.dir = 1;
@@ -815,7 +956,9 @@ namespace multi_media_game
                 pnn.Imgs.Add(pnnSora);
 
             }
-            pnn.Y = this.ClientSize.Height / 2 + this.ClientSize.Height / 4 - 90 - pnn.Imgs[0].Height / 2;
+            pnn.X = lm[0].sora.Width- pnn.Imgs[0].Width;
+
+            pnn.Y = slm[1].Imgs[0].Height-(pnn.Imgs[0].Height /2);
 
             LActsgates.Add(pnn);
         }
@@ -842,7 +985,6 @@ namespace multi_media_game
 
             LActTiger.Add(pnn);
         }
-
         void movetiger()
         {
 
@@ -850,7 +992,8 @@ namespace multi_media_game
             {
                 return;
             }
-            CACTor ptrv = LActTiger[0];
+              CACTor ptrv = LActTiger[0];
+
             if (ptrv.f7arka == 1)
             {
                 if (ptrv.X > 0 && ptrv.dir == 2)
@@ -889,8 +1032,10 @@ namespace multi_media_game
                     }
                 }
             }
+
+
+
         }
-        
         void attacktiger()
         {
             if (LActTiger.Count == 0 || LActs.Count == 0)
@@ -964,7 +1109,6 @@ namespace multi_media_game
             }
 
         }
-
         void createhelicopter()
         {
             CACTor pnn = new CACTor();
@@ -978,11 +1122,13 @@ namespace multi_media_game
             {
                 Bitmap pnnSora = new Bitmap("heli/" + (i + 1) + "h.png");
                 pnnSora.MakeTransparent();
+
                 pnn.Imgs.Add(pnnSora);
+
             }
             LActs.Add(pnn);
-        }
 
+        }
         void moveheli()
         {
             if (LActs.Count < 2){
@@ -996,6 +1142,7 @@ namespace multi_media_game
                 if (ptrv.IF >= 5 && ptrv.IF < 8)
                 {
                     ptrv.IF++;
+
                 }
                 if (ptrv.IF == 8)
                 {
@@ -1006,6 +1153,7 @@ namespace multi_media_game
                     ptrv.dir = 1;
                     ptrv.IF = 0;
                 }
+
             }
             if (ptrv.X + ptrv.Imgs[0].Width < lm[0].sora.Width && ptrv.dir == 1)
             {
@@ -1013,6 +1161,7 @@ namespace multi_media_game
                 if (ptrv.IF < 3)
                 {
                     ptrv.IF++;
+
                 }
                 if (ptrv.IF == 3)
                 {
@@ -1023,7 +1172,11 @@ namespace multi_media_game
                     ptrv.dir = 2;
                     ptrv.IF = 6;
                 }
+
             }
+
+
+
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -1050,17 +1203,40 @@ namespace multi_media_game
                 pnn.Dst = new Rectangle(0, 0, this.ClientSize.Width, this.ClientSize.Height);
                 g.DrawImage(pnn.sora, pnn.Dst, pnn.src, GraphicsUnit.Pixel);
             }
-
-            for (int i = 0; i < LActsgates.Count; i++)
+            if (levelState == 0)
             {
-                CACTor pTrv = LActsgates[i];
+
+
+
+                for (int i = 0; i < slm.Count; i++)
+                {
+                    CACTor pTrv = slm[i];
+                    g.DrawImage(pTrv.Imgs[pTrv.IF], pTrv.X - scrollX, pTrv.Y);
+                }
+                for (int i = 0; i < LActsgates.Count; i++)
+                {
+                    CACTor pTrv = LActsgates[i];
+                    g.DrawImage(pTrv.Imgs[pTrv.IF], pTrv.X - scrollX, pTrv.Y);
+                }
+            }
+            for (int i = 0; i < platform.Count; i++)
+            {
+                CACTor pTrv = platform[i];
                 g.DrawImage(pTrv.Imgs[pTrv.IF], pTrv.X - scrollX, pTrv.Y);
-            } 
+            }
             //charachters
             for (int i = 0; i < LActs.Count; i++)
             {
                 CACTor pTrv = LActs[i];
-                g.DrawImage(pTrv.Imgs[pTrv.IF], pTrv.X - scrollX, pTrv.Y);
+                if (i == 1 && levelState == 0)
+                {
+                    g.DrawImage(pTrv.Imgs[pTrv.IF], pTrv.X - scrollX, pTrv.Y);
+                }
+                if (i == 0)
+                {
+                    g.DrawImage(pTrv.Imgs[pTrv.IF], pTrv.X - scrollX, pTrv.Y);
+
+                }
             }
             /// coins
             for (int i = 0; i < coins.Count; i++)
@@ -1073,11 +1249,13 @@ namespace multi_media_game
                 CACTor pTrv = pC[i];
                 g.DrawImage(pTrv.Imgs[pTrv.IF], pTrv.X - scrollX, pTrv.Y);
             }
-
-            for (int i = 0; i < LActsBUlletsHeli.Count; i++)
+            if (levelState == 0)
             {
-                CACTor pTrv = LActsBUlletsHeli[i];
-                g.DrawImage(pTrv.Imgs[pTrv.IF], pTrv.X - scrollX, pTrv.Y);
+                for (int i = 0; i < LActsBUlletsHeli.Count; i++)
+                {
+                    CACTor pTrv = LActsBUlletsHeli[i];
+                    g.DrawImage(pTrv.Imgs[pTrv.IF], pTrv.X - scrollX, pTrv.Y);
+                }
             }
             for (int i = 0; i < LActsVEn.Count; i++)
             {
@@ -1099,6 +1277,7 @@ namespace multi_media_game
                 CACTor pTrv = LActsSpikes[i];
                 g.DrawImage(pTrv.Imgs[pTrv.IF], pTrv.X - scrollX, pTrv.Y);
             }
+
             if (LActs.Count == 0){
                 return;
             }
@@ -1114,11 +1293,14 @@ namespace multi_media_game
             if (Meess == 1 )
             {
                 g.DrawString("message: " + "press m to move", f, b, this.ClientSize.Width / 3 + 350, 20);
+
             }
             if (Meess == 2 && Onetime != 1 )
             {
                 g.DrawString("message: " + "press d to Drink", f, b, this.ClientSize.Width / 3 + 350, 20);
                 g.DrawString("message: " + "you Must have 3 coins", f, b, this.ClientSize.Width / 3 + 350, 50);
+
+
             }
             if (Meess == 3)
             {
@@ -1128,7 +1310,10 @@ namespace multi_media_game
             if (Meess == 4)
             {
                 g.DrawString("message: " + "You killed the tiger", f, b, this.ClientSize.Width / 3 + 350, 20);
+
             }
+
+
         }
 
     }
