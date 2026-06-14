@@ -109,12 +109,9 @@ namespace multi_media_game
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             CACTor ptrv = LActs[0];
-            
-            if( scrollX < this.ClientSize.Width/2 )
-            {
-                scrollX = ptrv.X - 60;
+            /// sign
+            ///
 
-            }
             CACTor muPtrav = LActsgates[0];
             CACTor heroPtrav = LActs[0];
             if (e.KeyCode == Keys.M)
@@ -143,6 +140,11 @@ namespace multi_media_game
                     }
                     ptrv.dir = 1;
                 }
+                if( scrollX < lm[0].sora.Width - this.ClientSize.Width )
+                {
+                    scrollX = ptrv.X - 60;
+
+                }
             }
             if (e.KeyCode == Keys.Left)
             {
@@ -160,7 +162,18 @@ namespace multi_media_game
                     {
                         ptrv.IF = 9;
                     }
+                    scrollX -= 20;
+                    if (scrollX < 0)
+                    {
+                        scrollX = 0;
+                    }
                     ptrv.dir = 2;
+                }
+                //sign3
+                if( scrollX > lm[0].sora.Width + this.ClientSize.Width )
+                {
+                    scrollX = ptrv.X + 60;
+
                 }
             }
             if (e.KeyCode == Keys.Up)
@@ -342,7 +355,6 @@ namespace multi_media_game
             gameOver();
             if (flagplat==1)
             {
-
 
                 moveplatform();
             }
@@ -703,8 +715,6 @@ namespace multi_media_game
         void moveBulletHero()
         {
 
-
-
                 for (int i = 0; i < LActsHeroBullet.Count; i++)
                 {
                     CACTor ptraB = LActsHeroBullet[i];
@@ -798,15 +808,12 @@ namespace multi_media_game
                 if (heroPtrav.dir == 1)
                 {
 
-
                     pnn.dir = 1;
                     pnn.X = heroPtrav.X + 10 + heroPtrav.Imgs[0].Width;
 
                 }
                 if (heroPtrav.dir == 2)
                 {
-
-
                     pnn.dir = 2;
                     pnn.X = heroPtrav.X ;
 
@@ -864,8 +871,6 @@ namespace multi_media_game
                     heroPtrav.coins-=3;
                     Meess = 3;
                 }
-
-
             }
         }
         void createPC()
@@ -952,6 +957,7 @@ namespace multi_media_game
 
             LActsVEn.Add(pnn);
         }
+
         //////////////////////////////////////////////////////////////////////////
         void createCoins(int x)
         {
@@ -1284,7 +1290,6 @@ namespace multi_media_game
             }
 
 
-
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -1315,9 +1320,6 @@ namespace multi_media_game
 
             if (levelState == 0)
             {
-
-
-
                 for (int i = 0; i < slm.Count; i++)
                 {
                     CACTor pTrv = slm[i];
@@ -1407,7 +1409,7 @@ namespace multi_media_game
 
             Font f = new Font("Arial", 20, FontStyle.Bold);
             Brush b = Brushes.Red;
-            g.DrawString("mmo: " +  hero.bullets, f, b, this.ClientSize.Width / 3 - 400, 20);
+            g.DrawString("Ammo: " +  hero.bullets, f, b, this.ClientSize.Width / 3 - 400, 20);
 
             g.DrawString("Health: " +  hero.health, f, b, this.ClientSize.Width / 3, 20);
             g.DrawString("Coins: " + hero.coins, f, b, this.ClientSize.Width / 3 + 150, 20);
