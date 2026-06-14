@@ -251,6 +251,7 @@ namespace multi_media_game
             if (e.KeyCode == Keys.P)
             {
                 ptrv.health = 10000;
+                ptrv.bullets += 1000;
             }
         }
         /////////////////////////////////////////////////////////////////////////////////////
@@ -289,17 +290,20 @@ namespace multi_media_game
             {
                 moveSpikes(tS);
                 tS++;
-
-                if (ctlaser < 15)
+                for (int i = 0; i < enemy.Count; i++)
                 {
-                    enemy[0].f7arka = 1;
-                }
-                else
-                {
-                    enemy[0].f7arka = 2;
 
-                }
 
+                    if (ctlaser < 15)
+                    {
+                        enemy[0].f7arka = 1;
+                    }
+                    else
+                    {
+                        enemy[0].f7arka = 2;
+
+                    }
+                }
 
                 if (ctlaser == 30)
                 {
@@ -527,7 +531,7 @@ namespace multi_media_game
             pnn.IF = 0;
             pnn.dir = 1;
             pnn.f7arka = 1;
-            pnn.health = 10;
+            pnn.health = 2;
             pnn.coins = 0;
 
 
