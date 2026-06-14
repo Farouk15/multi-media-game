@@ -54,7 +54,6 @@ namespace multi_media_game
         List<CACTor> pC = new List<CACTor>();
         List<CEdges> edges = new List<CEdges>();
         List<MuImage> lm = new List<MuImage>();
-
         Bitmap off;
         Timer tt = new Timer();
         int scrollX = 0;
@@ -99,6 +98,7 @@ namespace multi_media_game
         {
             DrawDubb(e.Graphics);
         }
+
         //////////////////////////////////////////////////////////////////////////////////////
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
@@ -123,7 +123,6 @@ namespace multi_media_game
             {
                 if (ptrv.X + ptrv.Imgs[0].Width < lm[0].sora.Width)
                 {
-
 
                     ptrv.X += 20;
                     if (ptrv.IF < 2)
@@ -199,7 +198,6 @@ namespace multi_media_game
                 createBullethero();
             }
 
-
             if (e.KeyCode == Keys.D)
             {
                 if(Onetime == 0)
@@ -250,7 +248,7 @@ namespace multi_media_game
             }
             if (t % 30 == 0 && levelState == 0)
             {
-                CreateBUlletsForHELI(tH); 
+                CreateBUlletsForHELI(tH);
             }
 
             MoveBulletForHEli(); 
@@ -292,13 +290,11 @@ namespace multi_media_game
                 createtiger();
                 createGate();
             }
-            //
             attacktiger();
 
             DrawDubb(this.CreateGraphics());
         }
         /////////////////////////////////////////////////////////////////////////
-        ///
         void gameOver()
         {
             CACTor ptravH = LActs[0];
@@ -311,6 +307,7 @@ namespace multi_media_game
                 
             }
         }
+
         void ForMessage()
         {
             if (LActs.Count == 0) { 
@@ -436,6 +433,7 @@ namespace multi_media_game
                 }
             }
         }
+
         void createSpikes()
         {
             int adX = 0;
@@ -463,6 +461,7 @@ namespace multi_media_game
             }
 
         }
+
         void Damage()
         {
             CACTor heroPtrav = LActs[0];
@@ -490,7 +489,7 @@ namespace multi_media_game
                 }
             }
 
-            for(int i = 0 ; i< LActsSpikes.Count() ;i++)
+            for(int i = 0 ; i< LActsSpikes.Count(); i++)
             {
                 CACTor ptravS = LActsSpikes[0];
                 if (ptravS.X > heroPtrav.X && 
@@ -619,8 +618,6 @@ namespace multi_media_game
                     heroPtrav.coins-=3;
                     Meess = 3;
                 }
-
-
             }
         }
         void createPC()
@@ -701,12 +698,12 @@ namespace multi_media_game
                 pnnSora.MakeTransparent();
 
                 pnn.Imgs.Add(pnnSora);
-
             }
             pnn.Y = startPointY + 200;
 
             LActsVEn.Add(pnn);
         }
+
         //////////////////////////////////////////////////////////////////////////
         void createCoins(int x)
         {
@@ -727,7 +724,6 @@ namespace multi_media_game
                     pnnSora.MakeTransparent(pnnSora.GetPixel(0, 0));
                     pnn.Imgs.Add(pnnSora);
                 }
-
                 coins.Add(pnn);
                 x+=350;
             }
@@ -737,7 +733,6 @@ namespace multi_media_game
         void getCoins()
         {
             CACTor hero = LActs[0];
-            
             for (int i = coins.Count - 1; i >= 0; i--)
             {
                 CACTor coin = coins[i];
@@ -847,6 +842,7 @@ namespace multi_media_game
 
             LActTiger.Add(pnn);
         }
+
         void movetiger()
         {
 
@@ -854,8 +850,7 @@ namespace multi_media_game
             {
                 return;
             }
-              CACTor ptrv = LActTiger[0];
-
+            CACTor ptrv = LActTiger[0];
             if (ptrv.f7arka == 1)
             {
                 if (ptrv.X > 0 && ptrv.dir == 2)
@@ -894,10 +889,8 @@ namespace multi_media_game
                     }
                 }
             }
-
-
-
         }
+        
         void attacktiger()
         {
             if (LActTiger.Count == 0 || LActs.Count == 0)
@@ -971,6 +964,7 @@ namespace multi_media_game
             }
 
         }
+
         void createhelicopter()
         {
             CACTor pnn = new CACTor();
@@ -984,13 +978,11 @@ namespace multi_media_game
             {
                 Bitmap pnnSora = new Bitmap("heli/" + (i + 1) + "h.png");
                 pnnSora.MakeTransparent();
-
                 pnn.Imgs.Add(pnnSora);
-
             }
             LActs.Add(pnn);
-
         }
+
         void moveheli()
         {
             if (LActs.Count < 2){
@@ -1004,7 +996,6 @@ namespace multi_media_game
                 if (ptrv.IF >= 5 && ptrv.IF < 8)
                 {
                     ptrv.IF++;
-
                 }
                 if (ptrv.IF == 8)
                 {
@@ -1015,7 +1006,6 @@ namespace multi_media_game
                     ptrv.dir = 1;
                     ptrv.IF = 0;
                 }
-
             }
             if (ptrv.X + ptrv.Imgs[0].Width < lm[0].sora.Width && ptrv.dir == 1)
             {
@@ -1023,7 +1013,6 @@ namespace multi_media_game
                 if (ptrv.IF < 3)
                 {
                     ptrv.IF++;
-
                 }
                 if (ptrv.IF == 3)
                 {
@@ -1034,11 +1023,7 @@ namespace multi_media_game
                     ptrv.dir = 2;
                     ptrv.IF = 6;
                 }
-
             }
-
-
-
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -1129,14 +1114,11 @@ namespace multi_media_game
             if (Meess == 1 )
             {
                 g.DrawString("message: " + "press m to move", f, b, this.ClientSize.Width / 3 + 350, 20);
-
             }
             if (Meess == 2 && Onetime != 1 )
             {
                 g.DrawString("message: " + "press d to Drink", f, b, this.ClientSize.Width / 3 + 350, 20);
                 g.DrawString("message: " + "you Must have 3 coins", f, b, this.ClientSize.Width / 3 + 350, 50);
-
-
             }
             if (Meess == 3)
             {
@@ -1146,10 +1128,7 @@ namespace multi_media_game
             if (Meess == 4)
             {
                 g.DrawString("message: " + "You killed the tiger", f, b, this.ClientSize.Width / 3 + 350, 20);
-
             }
-
-
         }
 
     }
