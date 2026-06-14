@@ -621,8 +621,6 @@ namespace multi_media_game
         void moveBulletHero()
         {
 
-
-
                 for (int i = 0; i < LActsHeroBullet.Count; i++)
                 {
                     CACTor ptraB = LActsHeroBullet[i];
@@ -689,15 +687,12 @@ namespace multi_media_game
                 if (heroPtrav.dir == 1)
                 {
 
-
                     pnn.dir = 1;
                     pnn.X = heroPtrav.X + 10 + heroPtrav.Imgs[0].Width;
 
                 }
                 if (heroPtrav.dir == 2)
                 {
-
-
                     pnn.dir = 2;
                     pnn.X = heroPtrav.X ;
 
@@ -755,8 +750,6 @@ namespace multi_media_game
                     heroPtrav.coins-=3;
                     Meess = 3;
                 }
-
-
             }
         }
         void createPC()
@@ -1176,7 +1169,6 @@ namespace multi_media_game
             }
 
 
-
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -1205,9 +1197,6 @@ namespace multi_media_game
             }
             if (levelState == 0)
             {
-
-
-
                 for (int i = 0; i < slm.Count; i++)
                 {
                     CACTor pTrv = slm[i];
